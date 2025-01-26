@@ -53,6 +53,15 @@ public class ClientService {
         }
     }
 
+    @Transactional
+    public void deleteClientById(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResorceNotFoundExeption("Recurso nao encontrado");
+        } else  {
+            repository.deleteById(id);
+        }
+    }
+
     private void insertClientData(ClientDTO dto, Client client) {
         client.setName(dto.getName());
         client.setChildren(dto.getChildren());

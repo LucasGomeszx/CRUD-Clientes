@@ -13,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping(value = "/client")
+@RequestMapping(value = "/clients")
 public class ClientController {
 
     @Autowired
@@ -42,6 +42,12 @@ public class ClientController {
     public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @Valid @RequestBody ClientDTO dto) {
         dto = service.updateClient(id, dto);
         return ResponseEntity.ok(dto);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteClientById(@PathVariable Long id) {
+        service.deleteClientById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
