@@ -4,6 +4,7 @@ import com.CRUDClientes.demo.dto.ClientDTO;
 import com.CRUDClientes.demo.entities.Client;
 import com.CRUDClientes.demo.repositories.ClientRepository;
 import com.CRUDClientes.demo.service.exeptions.ResorceNotFoundExeption;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,9 +41,20 @@ public class ClientService {
         return new ClientDTO(client);
     }
 
+    @Transactional
+    public ClientDTO updateClient(Long id, ClientDTO dto) {
+        try {
+            Client client = repository.getReferenceById(id);
+            insertClientData(dto, client);
+            client = repository.save(client);
+            return new ClientDTO(client);
+        } catch (EntityNotFoundException e) {
+            throw new ResorceNotFoundExeption("Recurso nao encontrado");
+        }
+    }
+
     private void insertClientData(ClientDTO dto, Client client) {
         client.setName(dto.getName());
-        client.setId(dto.getId());
         client.setChildren(dto.getChildren());
         client.setBirthDate(dto.getBirthDate());
         client.setCpf(dto.getCpf());
